@@ -11,10 +11,10 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient({ log: ['query'] });
 
 const GitHubStrategy = require('passport-github2').Strategy;
-const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID || 'e19424fce7d641e64426';
+const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID || '2f831cb3d4aac02393aa';
 const GITHUB_CLIENT_SECRET =
   process.env.GITHUB_CLIENT_SECRET ||
-  'a8a85275d499603f09688a26d715a91018a838dc';
+  '9fbc340ac0175123695d2dedfbdf5a78df3b8067';
 
 passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((obj, done) => done(null, obj));
@@ -24,7 +24,9 @@ passport.use(
     {
       clientID: GITHUB_CLIENT_ID,
       clientSecret: GITHUB_CLIENT_SECRET,
-      callbackURL: process.env.CALLBACK_URL || 'https://ra-schedule-arranger.onrender.com/auth/github/callback',
+      callbackURL:
+        process.env.CALLBACK_URL ||
+        'http://localhost:8000/auth/github/callback',
     },
     (accessToken, refreshToken, profile, done) => {
       process.nextTick(async () => {
@@ -97,7 +99,7 @@ app.get(
   passport.authenticate('github', { scope: ['user:email'] })
 );
 
-  '/auth/github/callback',
+'/auth/github/callback',
   passport.authenticate('github', { failureRedirect: '/login' }),
   (req, res) => {
     const loginFrom = req.cookies.loginFrom;
@@ -108,8 +110,7 @@ app.get(
     } else {
       res.redirect('/');
     }
-  }
-);
+  };
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

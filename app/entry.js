@@ -13,7 +13,8 @@ $('.availability-toggle-button').each((i, e) => {
     const candidateId = button.data('candidate-id');
     const availability = parseInt(button.data('availability'));
     const nextAvailability = (availability + 1) % 3;
-    $.post(`/schedules/${scheduleId}/users/${userId}/candidates/${candidateId}`,
+    $.post(
+      `/schedules/${scheduleId}/users/${userId}/candidates/${candidateId}`,
       { availability: nextAvailability },
       (data) => {
         button.data('availability', data.availability);
@@ -23,7 +24,8 @@ $('.availability-toggle-button').each((i, e) => {
         const buttonStyles = ['btn-danger', 'btn-secondary', 'btn-success'];
         button.removeClass('btn-danger btn-secondary btn-success');
         button.addClass(buttonStyles[data.availability]);
-      });
+      }
+    );
   });
 });
 
@@ -33,10 +35,25 @@ buttonSelfComment.on('click', () => {
   const userId = buttonSelfComment.data('user-id');
   const comment = prompt('コメントを255文字以内で入力してください。');
   if (comment) {
-    $.post(`/schedules/${scheduleId}/users/${userId}/comments`,
+    $.post(
+      `/schedules/${scheduleId}/users/${userId}/comments`,
       { comment: comment },
       (data) => {
         $('#self-comment').text(data.comment);
-      });
+      }
+    );
   }
+});
+
+const shareUrl = window.location.href;
+const shareUrlInput = $('#share-url');
+const shareUrlCopyButton = $('#copy-button');
+
+shareUrlInput.val(shareUrl);
+
+shareUrlCopyButton.on('click', () => {
+  navigator.clipboard.writeText(shareUrl).then(() => {
+    shareUrlCopyButton.text('Copied!');
+    setTimeout(() => shareUrlCopyButton.text('Copy'), 1000);
+  });
 });
