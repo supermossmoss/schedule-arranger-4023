@@ -2,6 +2,7 @@ extends layout
 
 block content
   form.my-3(method="post", action="/schedules")
+    input(type="hidden" name="_csrf" value!=csrfToken)
     div.mb-3
       label.form-label(for="scheduleName") 予定名
       input#scheduleName.form-control(type="text" name="scheduleName")
